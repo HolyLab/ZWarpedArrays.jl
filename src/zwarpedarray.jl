@@ -1,7 +1,7 @@
 mutable struct ZWarpedArray{TO,TI,N} <: CachedSeries2D{TO,TI,N}
     parent::AbstractArray{TI,N}
     tfms::Vector{CoordinateTransformations.Transformation}
-    cached::AbstractArray{TO,2}
+    cached::Array{TO,2}
     cache_idxs::Tuple
     correct_bias::Bool
     sqrt_tfm::Bool
