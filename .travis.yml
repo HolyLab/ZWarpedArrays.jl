@@ -4,8 +4,8 @@ os:
   - linux
   - osx
 julia:
-  - 0.6
-  - nightly
+  - 1.0
+  - 0.7
 notifications:
   email: false
 git:
@@ -18,18 +18,26 @@ git:
 #  - julia: nightly
 
 ## uncomment and modify the following lines to manually install system packages
-#addons:
-#  apt: # apt-get for linux
-#    packages:
-#    - gfortran
-#before_script: # homebrew for mac
-#  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
+addons:
+  apt:
+    packages:
+      - build-essential
+      - gfortran
+      - pkg-config
+      - hdf5-tools
 
 ## uncomment the following lines to override the default test script
-#script:
-#  - julia -e 'Pkg.clone(pwd()); Pkg.build("ZWarpedArrays"); Pkg.test("ZWarpedArrays"; coverage=true)'
+script:
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia ci_prep.jl
+  - julia -e 'using Pkg; Pkg.build(); Pkg.test("ZWarpedArrays"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("ZWarpedArrays")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  #- julia -e 'cd(Pkg.dir("CachedCalls")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("ZWarpedArrays")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  # (using Coverage 0.6.0 until Coverage.jl #187 is resolved)
+  - julia -e 'using Pkg; pkg"add Coverage@0.6.0"; using Coverage; Codecov.submit(Codecov.process_folder())'
+  #- julia -e 'cd(Pkg.dir("CachedCalls")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  # update the documentation
+  #   - julia -e 'using Pkg; Pkg.add("Documenter")'
+    #  - julia -e 'using CachedCalls; cd(dirname(dirname(pathof(CachedCalls)))); ENV["DOCUMENTER_DEBUG"] = "true"; include(joinpath("docs", "make.jl"))'
