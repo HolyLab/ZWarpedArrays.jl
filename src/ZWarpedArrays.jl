@@ -1,13 +1,24 @@
 module ZWarpedArrays
 
-using Images, AxisArrays, ImageTransformations, Interpolations, CoordinateTransformations, CachedSeries
+using Images, AxisArrays, ImageTransformations, Interpolations, CoordinateTransformations
+const axes = Base.axes #for name conflict with AxisArrays
 
-import CachedSeries: update_cache!, cache, cache_idxs
-import Base: size, getindex, setindex!, show
+using Unitful #just for match_axisspacing
+
+using CachedArrays
+import CachedArrays: AbstractCachedArray,
+                        update_cache!,
+                        parent,
+                        cache,
+                        current_I,
+                        set_I!,
+                        cached_axes,
+                        noncached_axes,
+                        axisspacing,
+                        match_axisspacing
+import Base: show
 
 export ZWarpedArray, warp_and_resample
-
-const Array34{T} = Union{AbstractArray{T,3}, AbstractArray{T,4}}
 
 include("util.jl")
 include("zwarpedarray.jl")
