@@ -1,4 +1,4 @@
-mutable struct ZWarpedArray{TO,TI,N,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,TI,N,NC,AA}
+mutable struct ZWarpedArray{TO,N,TI,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,N,TI,NC,AA}
     parent::AA
     tfms::Vector{CoordinateTransformations.Transformation}
     cached::Array{TO,NC}
@@ -30,7 +30,7 @@ function ZWarpedArray(img::AbstractArray{T, N}, tfms, out_type=Float64, nd_cache
     cache_rngs = axes(img)[nd_cache+1:ndims(img)]
     ci = map(first, cache_rngs)
     cached = similar(view(img, axes(img)[1:nd_cache]..., ci...), out_type)
-    za = ZWarpedArray{out_type, T, ndims(img), nd_cache, typeof(img)}(img, tfms, cached, (ci...,), correct_bias, sqrt_tfm)
+    za = ZWarpedArray{out_type, ndims(img), T, nd_cache, typeof(img)}(img, tfms, cached, (ci...,), correct_bias, sqrt_tfm)
     update_cache!(za, (ci...,))
     return za
 end
@@ -52,7 +52,7 @@ function biasval(t::Type)
     return ifelse(t==UInt16, native, reinterpret(Normed{UInt16, 16}, native))
 end
 
-function update_cache!(A::ZWarpedArray{TO,TI,N,NC,AA}, inds::NTuple{N2,Int}) where {TO,TI,N,NC,AA,N2}
+function update_cache!(A::ZWarpedArray{TO,N,TI,NC,AA}, inds::NTuple{N2,Int}) where {TO,N,TI,NC,AA,N2}
     pslice = view(parent(A), cached_axes(A)..., inds...) #TODO: may be faster to use copy instead of view here
     pp = identity
     #note: the max statements below only seem necessary due to the way fixed point numbers are converted,
