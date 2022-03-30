@@ -1,4 +1,4 @@
-mutable struct ZWarpedArray{TO,TI,N,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,TI,N,NC,AA}
+mutable struct ZWarpedArray{TO,TI,N,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,N,TI,NC,AA}
     parent::AA
     tfms::Vector{CoordinateTransformations.Transformation}
     cached::Array{TO,NC}
@@ -77,5 +77,5 @@ end
 show(io::IO, A::ZWarpedArray{TO}) where {TO} = print(io, "ZWarpedArray of size $(size(A)) mapped to element type $TO\n")
 show(io::IO, ::MIME"text/plain", A::ZWarpedArray{TO}) where {TO} = show(io, A)
 
-ZWarpedArray(img::ImageMeta, tfms, out_type=Float64; kwargs...) = ImageMeta(ZWarpedArray(data(img), tfms, out_type; kwargs...), properties(img))
-ZWarpedArray(img::AxisArray, tfms, out_type=Float64; kwargs...) = match_axisspacing(ZWarpedArray(data(img),tfms,out_type; kwargs...), img)
+ZWarpedArray(img::ImageMeta, tfms, out_type=Float64; kwargs...) = ImageMeta(ZWarpedArray(arraydata(img), tfms, out_type; kwargs...), properties(img))
+ZWarpedArray(img::AxisArray, tfms, out_type=Float64; kwargs...) = match_axisspacing(ZWarpedArray(img.data,tfms,out_type; kwargs...), img)

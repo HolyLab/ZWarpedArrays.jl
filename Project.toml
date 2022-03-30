@@ -1,6 +1,6 @@
 name = "ZWarpedArrays"
 uuid = "26d16474-33ca-11e9-0261-c59b979c6e18"
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 AxisArrays = "39de3d68-74b9-583c-8d2d-e117c070f3a9"
@@ -10,6 +10,15 @@ ImageTransformations = "02fcd773-0e25-5acc-982a-7f6622650795"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+
+[compat]
+AxisArrays = "0.4"
+CachedArrays = "0.1.2"
+CoordinateTransformations = "0.5, 0.6"
+Images = "0.23, 0.24, 0.25"
+Interpolations = "0.12, 0.13"
+Unitful = "1"
+julia = "1.1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
