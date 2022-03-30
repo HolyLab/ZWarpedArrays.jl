@@ -74,9 +74,9 @@ end
 meta = ImageMeta(img0t)
 zm  = ZWarpedArray(meta, tfms, Float64; correct_bias=false, sqrt_tfm=false);
 @test isa(zm, ImageMeta)
-@test all(data(zm) .== za3)
+@test all(arraydata(zm) .== za3)
 
 aa = AxisArray(img0t)
 zaa  = ZWarpedArray(aa, tfms, Float64; correct_bias=false, sqrt_tfm=false);
 @test isa(zaa, AxisArray)
-@test all(data(zaa) .== za3)
+@test all(zaa.data .== za3)
