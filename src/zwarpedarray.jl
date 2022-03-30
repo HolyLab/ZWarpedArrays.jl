@@ -1,4 +1,4 @@
-mutable struct ZWarpedArray{TO,TI,N,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,TI,N,NC,AA}
+mutable struct ZWarpedArray{TO,N,TI,NC,AA<:AbstractArray} <: AbstractCachedArray{TO,N,TI,NC,AA}
     parent::AA
     tfms::Vector{CoordinateTransformations.Transformation}
     cached::Array{TO,NC}
